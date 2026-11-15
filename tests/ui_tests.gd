@@ -62,6 +62,7 @@ func _run() -> void:
 	await _test_drag_and_place(game)
 	await _test_invalid_drop(game)
 	await _test_row_clear_animation(game)
+	await _test_column_clear_animation(game)
 	await _test_pause_and_restart(game)
 	await _test_game_over(game)
 
@@ -180,6 +181,24 @@ func _test_row_clear_animation(game: GameScreen) -> void:
 	check(game.get("_board_view").display == game.state.board.cells, "view synced after clear and gravity")
 	check(game.get("_busy") == false, "input unlocked after clear animation")
 	check(int(get_tree().root.get_node("Settings").get("best_score")) >= game.state.score, "best score tracks the live score")
+
+
+func _test_column_clear_animation(game: GameScreen) -> void:
+	game.call("_start_new_game", false)
+	for y: int in range(1, 8):
+		game.state.board.cells[y * 8 + 5] = 1  # column 5 misses its top cell
+	game.state.board.cells[2 * 8 + 7] = 2      # falls to the bottom after the clear
+	game.call("_refresh_tray")
+	game.get("_board_view").display = game.state.board.cells.duplicate()
+	game.state.tray = [PieceData.new(PieceDefs.parse("X"), 3), PieceData.new(PieceDefs.parse("XX"), 3), PieceData.new(PieceDefs.parse("X"), 3)]
+	game.call("_refresh_tray")
+	await _frames(2)
+	_drag_to(game, 0, Vector2i(5, 0))
+	await get_tree().create_timer(1.6).timeout
+	check(game.state.board.get_cell(5, 4) == 0, "the cleared column is empty")
+	check(game.state.board.get_cell(7, 7) == 2, "the surviving block falls to the bottom")
+	check(game.get("_board_view").display == game.state.board.cells, "view synced after the column clear")
+	check(game.get("_busy") == false, "input unlocked after the column clear")
 
 
 # ------------------------------------------------------------- pause / over

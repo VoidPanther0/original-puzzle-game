@@ -42,15 +42,18 @@ func can_place_piece(slot: int, origin: Vector2i) -> bool:
 	return board.can_place(tray[slot].shape, origin)
 
 
-## Points for clearing `rows` rows at the given combo streak (combo >= 1).
-static func clear_points(rows: int, combo_streak: int) -> int:
-	return LINE_BASE_POINTS * rows * rows * maxi(1, combo_streak)
+## Points for clearing `lines` lines at the given combo streak (combo >= 1).
+static func clear_points(lines: int, combo_streak: int) -> int:
+	return LINE_BASE_POINTS * lines * lines * maxi(1, combo_streak)
 
 
 ## Attempts to place the piece in `slot`. The result dictionary always has
 ## "ok". On success it also holds:
-##   cells, color_id, cleared_rows, moves, points, combo,
-##   board_before_clear (PackedInt32Array), refilled, game_over
+##   cells, color_id, steps (Array of {cleared_rows, cleared_cols, moves,
+##   before}), points, combo, board_before_clear, refilled, game_over
+## Each entry in `steps` is one cascade: the lines that cleared and the
+## gravity that followed. `moves` is {"from": Array[Vector2i],
+## "to": Array[Vector2i]} for the blocks that moved in that step.
 func place_piece(slot: int, origin: Vector2i) -> Dictionary:
 	if not can_place_piece(slot, origin):
 		return {"ok": false}
@@ -62,15 +65,38 @@ func place_piece(slot: int, origin: Vector2i) -> Dictionary:
 		placed_cells.append(origin + c)
 
 	var points: int = piece.cell_count()
-	var before_clear: PackedInt32Array = board.cells.duplicate()
-	var cleared: Array[int] = board.full_rows()
-	var moves: Array[Vector2i] = []
-	if cleared.is_empty():
+	var board_before_clear: PackedInt32Array = board.cells.duplicate()
+
+	# Cascade: clear -> fall -> clear -> fall ... until no full line remains.
+	var steps: Array[Dictionary] = []
+	var combo_before: int = combo
+	var combo_streak: int = combo_before
+	var any_clear: bool = true
+	while any_clear:
+		var cleared: Array[int] = board.full_rows()
+		var cleared_cols: Array[int] = board.full_columns()
+		if cleared.is_empty() and cleared_cols.is_empty():
+			any_clear = false
+			break
+		any_clear = true
+		combo_streak += 1
+		var lines: int = cleared.size() + cleared_cols.size()
+		points += clear_points(lines, combo_streak)
+		var before: PackedInt32Array = board.cells.duplicate()
+		var moves: Dictionary = board.clear_lines(cleared, cleared_cols)
+		var after: PackedInt32Array = board.cells.duplicate()
+		steps.append({
+			"cleared_rows": cleared,
+			"cleared_cols": cleared_cols,
+			"moves": moves,
+			"before": before,
+			"after": after,
+		})
+
+	if steps.is_empty():
 		combo = 0
 	else:
-		combo += 1
-		points += clear_points(cleared.size(), combo)
-		moves = board.clear_rows(cleared)
+		combo = combo_streak
 
 	tray[slot] = null
 	var refilled: bool = false
@@ -87,15 +113,27 @@ func place_piece(slot: int, origin: Vector2i) -> Dictionary:
 		is_over = true
 		game_over.emit()
 
+	# Backward-compatible top-level keys (first cascade step, if any).
+	var first_cleared: Array[int] = []
+	var first_cleared_cols: Array[int] = []
+	var first_moves: Dictionary = {}
+	if not steps.is_empty():
+		var first_step: Dictionary = steps[0]
+		first_cleared = first_step["cleared_rows"]
+		first_cleared_cols = first_step["cleared_cols"]
+		first_moves = first_step["moves"]
+
 	return {
 		"ok": true,
 		"cells": placed_cells,
 		"color_id": piece.color_id,
-		"cleared_rows": cleared,
-		"moves": moves,
+		"steps": steps,
+		"cleared_rows": first_cleared,
+		"cleared_cols": first_cleared_cols,
+		"moves": first_moves,
 		"points": points,
 		"combo": combo,
-		"board_before_clear": before_clear,
+		"board_before_clear": board_before_clear,
 		"refilled": refilled,
 		"game_over": is_over,
 	}

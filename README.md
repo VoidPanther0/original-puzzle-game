@@ -7,20 +7,23 @@ assets, no network access.
 ## How to play
 
 Drag one of the three pieces onto the 8x8 board. A piece must fit completely
-inside the board and may not overlap other blocks. When a horizontal row is
-completely filled it clears, and **gravity** then drops everything above it.
-When all three pieces are used, three new ones appear. The game ends when none
-of the remaining pieces fits anywhere.
+inside the board and may not overlap other blocks. When a horizontal row or a
+vertical column is completely filled it clears, and **gravity** then drops
+everything to the bottom of the board (blocks can cascade into further clears). When all three pieces are used, three new ones appear.
+The game ends when none of the remaining pieces fits anywhere.
 
 ### Rules in detail
 
-- **Clearing:** only full horizontal rows clear. Several rows can clear at once.
-- **Gravity:** after rows clear, each remaining row keeps its exact contents and
-  falls so that no cleared row remains below it (whole-row compaction). This
-  never changes the shape of what is left and can never create a new full row,
-  so there are no cascades. The rule lives in `scripts/game/gravity.gd`.
-- **Score:** 1 point per cell placed, plus `10 x rows x rows x combo` for a clear.
-- **Combo:** counts consecutive placements that clear at least one row. A
+- **Clearing:** full horizontal rows **and** full vertical columns clear at the
+  same time. Several lines can clear at once.
+- **Gravity:** after lines clear, every surviving block falls straight down to
+  the bottom of its own column, filling every gap (classic per-column gravity).
+  Columns never slide sideways. Because blocks fall to the bottom, a fall can
+  create new full lines, so the game cascades (clear -> fall -> clear -> fall)
+  until no full line remains. The rule lives in `scripts/game/gravity.gd`.
+- **Score:** 1 point per cell placed, plus `10 x lines x lines x combo` for a
+  clear, where `lines` is the number of rows and columns cleared together.
+- **Combo:** counts consecutive placements that clear at least one line. A
   placement that clears nothing resets it to zero.
 - **Fair pieces:** a new set of three is re-rolled (up to 12 times) if none of
   its pieces would fit the board at all. A set that still cannot fit is allowed,
@@ -63,11 +66,12 @@ godot --headless --path . -s tests/run_tests.gd
 godot --headless --path . res://tests/ui_tests.tscn
 ```
 
-- `run_tests.gd`: placement, invalid placement, row clearing, multi-row clears,
-  gravity, scoring, combo, piece regeneration, game over, restart, save/load.
+- `run_tests.gd`: placement, invalid placement, row clearing, column clearing,
+  multi-line clears, gravity, scoring, combo, piece regeneration, game over,
+  restart, save/load.
 - `ui_tests.tscn`: drives the real game screen (drag and drop, invalid drops,
-  clear and gravity animation, pause, restart, game over, navigation) and checks
-  layout at six screen sizes from small phone to landscape desktop.
+  row and column clear animations, pause, restart, game over, navigation) and
+  checks layout at six screen sizes from small phone to landscape desktop.
 
 Both exit with code 1 on any failure. The tests use temporary save files and
 never touch your real best score.

@@ -77,7 +77,33 @@ func full_rows() -> Array[int]:
 	return rows
 
 
-## Removes the given rows and applies gravity. Returns the row moves
-## (Vector2i(from_row, to_row)) so views can animate them.
-func clear_rows(rows: Array[int]) -> Array[Vector2i]:
-	return Gravity.apply(cells, size, rows)
+## The columns that are completely filled.
+func full_columns() -> Array[int]:
+	var columns: Array[int] = []
+	for x: int in size:
+		var full: bool = true
+		for y: int in size:
+			if cells[y * size + x] == 0:
+				full = false
+				break
+		if full:
+			columns.append(x)
+	return columns
+
+
+## Removes the given rows and columns and applies classic gravity (blocks fall
+## to the bottom of their column). Returns the cell moves for animation.
+func clear_lines(rows: Array[int], columns: Array[int]) -> Dictionary:
+	return Gravity.apply(cells, size, rows, columns)
+
+
+## Removes the given columns (they become empty) and applies classic gravity.
+func clear_columns(columns: Array[int]) -> Dictionary:
+	var no_rows: Array[int] = []
+	return clear_lines(no_rows, columns)
+
+
+## Removes the given rows and applies classic gravity. Returns the cell moves.
+func clear_rows(rows: Array[int]) -> Dictionary:
+	var no_columns: Array[int] = []
+	return clear_lines(rows, no_columns)

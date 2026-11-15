@@ -267,7 +267,7 @@ func _move_drag(pointer: Vector2) -> void:
 	if state.can_place_piece(_drag_slot, origin) and Settings.ghost_preview:
 		var preview: BoardModel = state.board.duplicate_model()
 		preview.place(piece.shape, piece.color_id, origin)
-		_board_view.set_ghost(piece.shape, origin, piece.color_id, preview.full_rows())
+		_board_view.set_ghost(piece.shape, origin, piece.color_id, preview.full_rows(), preview.full_columns())
 	else:
 		_board_view.clear_ghost()
 
@@ -324,8 +324,7 @@ func _commit_placement(slot: int, origin: Vector2i) -> void:
 		_busy = false
 		return
 
-	var cleared: Array[int] = result["cleared_rows"]
-	var moves: Array[Vector2i] = result["moves"]
+	var steps: Array = result["steps"]
 
 	# 1. Show the board with the piece placed, before any rows vanish.
 	_board_view.display = result["board_before_clear"]
@@ -333,15 +332,22 @@ func _commit_placement(slot: int, origin: Vector2i) -> void:
 	Haptics.light()
 	await _board_view.animate_pop(result["cells"])
 
-	# 2. Rows clear, then gravity.
-	if not cleared.is_empty():
+	# 2. Cascade: clear -> fall -> clear -> fall ... until nothing clears.
+	if not steps.is_empty():
 		var combo: int = result["combo"]
 		Sfx.play("combo" if combo >= 2 else "clear")
 		Haptics.medium()
 		_spawn_popup("+%d" % result["points"], combo)
-		await _board_view.animate_clear(cleared)
-		_board_view.display = state.board.cells.duplicate()
-		await _board_view.animate_gravity(moves)
+		for step: Dictionary in steps:
+			var cleared: Array[int] = step["cleared_rows"]
+			var cleared_cols: Array[int] = step["cleared_cols"]
+			var moves: Dictionary = step["moves"]
+			# Show the board as it was before this clear.
+			_board_view.display = step["before"]
+			await _board_view.animate_clear(cleared, cleared_cols)
+			# Show the board after the fall.
+			_board_view.display = step["after"]
+			await _board_view.animate_gravity(moves)
 	else:
 		_board_view.display = state.board.cells.duplicate()
 

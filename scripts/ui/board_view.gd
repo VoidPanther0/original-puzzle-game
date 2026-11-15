@@ -15,13 +15,15 @@ var ghost_shape: Array[Vector2i] = []
 var ghost_origin: Vector2i = Vector2i.ZERO
 var ghost_color_id: int = 1
 var preview_rows: Array[int] = []
+var preview_cols: Array[int] = []
 
 # Animation state
 var _pop_cells: Array[Vector2i] = []
 var _pop_t: float = 1.0
 var _flash_rows: Array[int] = []
+var _flash_cols: Array[int] = []
 var _flash_t: float = 0.0
-var _fall_from: Dictionary = {}  # to_row -> from_row
+var _move_offsets: Dictionary = {}  # cell index -> Vector2 offset (old - new)
 var _fall_t: float = 0.0
 
 
@@ -64,19 +66,21 @@ func global_to_cell(point: Vector2) -> Vector2:
 
 # ---------------------------------------------------------------- ghost
 
-func set_ghost(shape: Array[Vector2i], origin: Vector2i, color_id: int, rows: Array[int]) -> void:
+func set_ghost(shape: Array[Vector2i], origin: Vector2i, color_id: int, rows: Array[int], columns: Array[int]) -> void:
 	ghost_shape = shape
 	ghost_origin = origin
 	ghost_color_id = color_id
 	preview_rows = rows
+	preview_cols = columns
 	queue_redraw()
 
 
 func clear_ghost() -> void:
-	if ghost_shape.is_empty() and preview_rows.is_empty():
+	if ghost_shape.is_empty() and preview_rows.is_empty() and preview_cols.is_empty():
 		return
 	ghost_shape = []
 	preview_rows = []
+	preview_cols = []
 	queue_redraw()
 
 
@@ -94,33 +98,40 @@ func animate_pop(cells: Array[Vector2i]) -> void:
 
 
 ## Full rows flash and shrink away. The caller then swaps in the post-clear grid.
-func animate_clear(rows: Array[int]) -> void:
+func animate_clear(rows: Array[int], columns: Array[int]) -> void:
 	_flash_rows = rows
+	_flash_cols = columns
 	_flash_t = 0.0
 	var tween: Tween = create_tween()
 	tween.tween_method(_set_flash, 0.0, 1.0, 0.34).set_trans(Tween.TRANS_SINE)
 	await tween.finished
 	_flash_rows = []
+	_flash_cols = []
 	_flash_t = 0.0
 	queue_redraw()
 
 
-## Rows that moved fall from their old row to their new row.
-## `moves` holds Vector2i(from_row, to_row); `display` must already be the final grid.
-func animate_gravity(moves: Array[Vector2i]) -> void:
-	if moves.is_empty():
+## Blocks that survived the clear fall to their new place. `moves` holds the
+## "from"/"to" cell lists returned by Gravity.apply.
+func animate_gravity(moves: Dictionary) -> void:
+	_move_offsets.clear()
+	var from: Array[Vector2i] = moves.get("from", [])
+	var to: Array[Vector2i] = moves.get("to", [])
+	var longest: float = 1.0
+	for i: int in from.size():
+		var old_cell: Vector2i = from[i]
+		var new_cell: Vector2i = to[i]
+		var offset := Vector2(old_cell.x - new_cell.x, old_cell.y - new_cell.y)
+		_move_offsets[new_cell.y * board_size + new_cell.x] = offset
+		longest = maxf(longest, maxf(absf(offset.x), absf(offset.y)))
+	if _move_offsets.is_empty():
 		return
-	_fall_from.clear()
-	var longest: int = 1
-	for m: Vector2i in moves:
-		_fall_from[m.y] = m.x
-		longest = maxi(longest, m.y - m.x)
 	_fall_t = 1.0
+	var duration: float = 0.16 + 0.07 * longest
 	var tween: Tween = create_tween()
-	var duration: float = 0.16 + 0.07 * float(longest)
 	tween.tween_method(_set_fall, 1.0, 0.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	await tween.finished
-	_fall_from.clear()
+	_move_offsets.clear()
 	_fall_t = 0.0
 	queue_redraw()
 
@@ -157,31 +168,35 @@ func _draw() -> void:
 			var r := Rect2(origin + Vector2(x, y) * cell, Vector2(cell, cell)).grow(-inset)
 			UiTheme.draw_round_rect(self, r, UiTheme.CELL_EMPTY, cell * 0.2)
 
-	# Rows that would clear if the dragged piece is dropped here
+	# Rows and columns that would clear if the dragged piece is dropped here
 	for row: int in preview_rows:
 		var band := Rect2(origin + Vector2(0, row) * cell, Vector2(cell * board_size, cell)).grow(-inset)
+		UiTheme.draw_round_rect(self, band, Color(UiTheme.ACCENT, 0.22), cell * 0.2)
+	for col: int in preview_cols:
+		var band := Rect2(origin + Vector2(col, 0) * cell, Vector2(cell, cell * board_size)).grow(-inset)
 		UiTheme.draw_round_rect(self, band, Color(UiTheme.ACCENT, 0.22), cell * 0.2)
 
 	# Placed blocks
 	if display.size() == board_size * board_size:
 		for y: int in board_size:
-			var fall_offset: float = 0.0
-			if _fall_from.has(y):
-				fall_offset = float(_fall_from[y] - y) * _fall_t
 			for x: int in board_size:
 				var id: int = display[y * board_size + x]
 				if id == 0:
 					continue
-				var pos: Vector2 = origin + Vector2(x, y + fall_offset) * cell
+				var offset: Vector2 = Vector2.ZERO
+				if _fall_t > 0.0:
+					offset = _move_offsets.get(y * board_size + x, Vector2.ZERO) * _fall_t
+				var pos: Vector2 = origin + (Vector2(x, y) + offset) * cell
 				var r := Rect2(pos, Vector2(cell, cell)).grow(-inset)
 				if _pop_cells.has(Vector2i(x, y)):
 					var s: float = lerpf(0.55, 1.0, _pop_t)
 					r = Rect2(r.get_center() - r.size * s / 2.0, r.size * s)
-				if _flash_rows.has(y):
+				var flashing: bool = _flash_rows.has(y) or _flash_cols.has(x)
+				if flashing:
 					var shrink: float = 1.0 - _flash_t * 0.6
 					r = Rect2(r.get_center() - r.size * shrink / 2.0, r.size * shrink)
 				UiTheme.draw_block(self, r, id)
-				if _flash_rows.has(y):
+				if flashing:
 					UiTheme.draw_round_rect(self, r, Color(1, 1, 1, sin(_flash_t * PI) * 0.85), cell * 0.2)
 
 	# Ghost of the piece being dragged
