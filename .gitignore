@@ -1,3 +1,12 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Generated builds
+/build/
+
+# Signing material and credentials. NEVER commit these.
+*.keystore
+*.jks
+export_credentials.cfg
+.env
