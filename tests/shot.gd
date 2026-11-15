@@ -3,6 +3,7 @@ extends Node
 ## Run (not headless): godot --path . res://tests/shot.tscn -- <output_dir>
 
 func _ready() -> void:
+	get_tree().root.get_node("Settings").save_path = "user://shot_settings.cfg"
 	var out: String = OS.get_cmdline_user_args()[0] if OS.get_cmdline_user_args().size() > 0 else "user://"
 	await get_tree().process_frame
 	get_window().size = Vector2i(540, 960)

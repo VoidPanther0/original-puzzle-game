@@ -40,9 +40,9 @@ func _ready() -> void:
 
 func _run() -> void:
 	# Never touch the real save file from tests.
-	var settings: Node = get_tree().root.get_node("Settings")
-	settings.save_path = "user://ui_test_settings.cfg"
-	settings.best_score = 0
+	var app_settings: Node = get_tree().root.get_node("Settings")
+	app_settings.save_path = "user://ui_test_settings.cfg"
+	app_settings.best_score = 0
 	await get_tree().process_frame
 	var main: Control = load("res://scenes/main.tscn").instantiate()
 	get_tree().root.add_child(main)
