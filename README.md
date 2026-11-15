@@ -99,7 +99,7 @@ example `python -m http.server -d build/web`.
 
 ### Android setup
 
-Package id `com.voidpanther.originalpuzzle`, name "Original Puzzle", portrait,
+Package id `com.block.fall`, name "Block Fall", portrait,
 minimum Android 7.0 (API 24), arm64 for the debug APK, arm64 and armv7 for the
 release AAB. The only permission requested is `VIBRATE`.
 

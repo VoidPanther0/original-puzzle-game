@@ -1,6 +1,6 @@
 class_name UiTheme
 extends RefCounted
-## Visual identity for Original Puzzle: deep indigo night, glowing teal accent,
+## Visual identity for Block Fall: deep indigo night, glowing teal accent,
 ## and seven "gem" block colours. Everything is drawn in code, so the game
 ## needs no image assets.
 
