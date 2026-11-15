@@ -150,6 +150,29 @@ Never put keystore files or passwords in the project or in git (`*.keystore`,
 Not configured yet. The project uses only cross-platform Godot features, so it
 should export to iOS later with the iOS export template and a Mac.
 
+## Continuous integration
+
+![Build](https://github.com/VoidPanther0/original-puzzle-game/actions/workflows/build-android.yml/badge.svg)
+
+`.github/workflows/build-android.yml` runs on every push and pull request to
+`main`, and can also be started by hand from the Actions tab. It has two jobs:
+
+- **Tests**: runs the same two headless runners listed under [Tests](#tests).
+- **Build debug APK**: exports `build/android/OriginalPuzzle-debug.apk` and
+  uploads it as the `OriginalPuzzle-debug-apk` artifact.
+
+The build job pins the same versions as a local build: Godot 4.7.2 stable,
+JDK 17, build-tools 36.1.0, platform android-36 and NDK 29.0.14206865. It
+installs the Android build template from the export templates, generates a
+throwaway debug keystore and writes the SDK paths into a temporary Godot editor
+settings file, so no secrets are needed for the debug APK.
+
+To install the artifact on a connected device, download it and run:
+
+```
+adb install OriginalPuzzle-debug.apk
+```
+
 ## Original assets
 
 All visuals are drawn in code or generated from the SVG icons in this repo, and
