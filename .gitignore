@@ -10,3 +10,15 @@
 *.jks
 export_credentials.cfg
 .env
+.env.*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+*~
+
+# Python caches (tooling)
+__pycache__/
+*.pyc
