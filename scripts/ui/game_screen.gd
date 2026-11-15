@@ -28,7 +28,6 @@ var _last_ghost_origin: Vector2i = Vector2i(-999, -999)
 var _busy: bool = false
 var _best_at_start: int = 0
 var _settings_overlay: SettingsScreen = null
-var _season_prev_score: int = 0
 
 
 func _ready() -> void:
@@ -192,9 +191,6 @@ func _refresh_tray() -> void:
 
 
 func _on_score_changed(score: int) -> void:
-	if score > _season_prev_score:
-		SeasonScreen.add_score_to_season(score - _season_prev_score)
-	_season_prev_score = score
 	_score_label.text = str(score)
 	_score_label.pivot_offset = _score_label.size / 2.0
 	var tween: Tween = _score_label.create_tween()

@@ -4,11 +4,6 @@ extends Control
 
 signal play_pressed()
 signal settings_pressed()
-signal season_pressed()
-signal feedback_pressed()
-signal photo_pressed()
-signal web_pressed()
-signal ad_pressed()
 
 var _best_label: Label
 var _logo: LogoView
@@ -32,14 +27,9 @@ func _ready() -> void:
 	margin.add_theme_constant_override("margin_bottom", int(inset.w))
 	add_child(margin)
 
-	var scroll := ScrollContainer.new()
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	margin.add_child(scroll)
-
 	var column := VBoxContainer.new()
-	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 20)
-	scroll.add_child(column)
+	margin.add_child(column)
 
 	var top_spacer := Control.new()
 	top_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -89,46 +79,6 @@ func _ready() -> void:
 		Sfx.play("click")
 		settings_pressed.emit())
 	column.add_child(settings)
-
-	var season := Button.new()
-	season.text = "Season Event"
-	season.custom_minimum_size = Vector2(0, 90)
-	season.pressed.connect(func() -> void:
-		Sfx.play("click")
-		season_pressed.emit())
-	column.add_child(season)
-
-	var feedback := Button.new()
-	feedback.text = "Feedback & Support"
-	feedback.custom_minimum_size = Vector2(0, 90)
-	feedback.pressed.connect(func() -> void:
-		Sfx.play("click")
-		feedback_pressed.emit())
-	column.add_child(feedback)
-
-	var photo := Button.new()
-	photo.text = "Profile Photo"
-	photo.custom_minimum_size = Vector2(0, 90)
-	photo.pressed.connect(func() -> void:
-		Sfx.play("click")
-		photo_pressed.emit())
-	column.add_child(photo)
-
-	var web := Button.new()
-	web.text = "Web Content"
-	web.custom_minimum_size = Vector2(0, 90)
-	web.pressed.connect(func() -> void:
-		Sfx.play("click")
-		web_pressed.emit())
-	column.add_child(web)
-
-	var ad := Button.new()
-	ad.text = "Demo Ad"
-	ad.custom_minimum_size = Vector2(0, 90)
-	ad.pressed.connect(func() -> void:
-		Sfx.play("click")
-		ad_pressed.emit())
-	column.add_child(ad)
 
 	if not OS.has_feature("web"):
 		var quit := Button.new()
