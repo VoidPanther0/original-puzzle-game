@@ -23,6 +23,9 @@ Newest first. Version numbers follow `config/app.json` / `export_presets.cfg` (`
 - Level start layouts always contain at least 4 stones, so the ability is available from level 1.
 - New HUD element `ui/shots_chip.gd` (crosshair + remaining charges, only visible while stone is on
   the board), hand-drawn crack overlay in `BoardView`, new SFX `crack` / `shot`.
+- **Rules version bumped to 3** (`BackendService.submit_score` sends `rules: 3`). The hammer and the
+  shot no longer apply gravity, so the server copy of the rules (`_shared/game.ts`) and the replay
+  cross-check must be updated to match before any release build validates scores.
 
 **UI**
 - New `ui/screens/adventure.gd` replaces the old chapter screen: current level, how to complete it,
