@@ -5,11 +5,51 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  GODOT_VERSION: "4.7.2"
+  EXPORT_NAME: "BlockFallingBlast"
+
 jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:4.7.2
+      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
     steps:
       - uses: actions/checkout@v4
-      - run: godot --version
+      - name: Run unit tests
+        run: |
+          godot --headless --path . -s res://tests/run_tests.gd 2>&1 | tee /tmp/run_tests.log
+          if grep -q "FAIL" /tmp/run_tests.log; then exit 1; fi
+          if grep -q "SCRIPT ERROR" /tmp/run_tests.log; then exit 1; fi
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            preset: "Windows Desktop"
+            output: "build/windows/BlockFallingBlast.exe"
+          - platform: android
+            preset: "Android"
+            output: "build/android/BlockFallingBlast.apk"
+          - platform: web
+            preset: "Web"
+            output: "build/web/index.html"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import project
+        run: godot --headless --path . --import
+      - name: Export
+        run: |
+          mkdir -p "$(dirname "${{ matrix.output }}")"
+          godot --headless --path . --export-release "${{ matrix.preset }}" "${{ matrix.output }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-${{ matrix.platform }}
+          path: ${{ matrix.output }}
+          if-no-files-found: error
