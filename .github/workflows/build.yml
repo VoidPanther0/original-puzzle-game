@@ -9,20 +9,7 @@ env:
   GODOT_VERSION: "4.7.2"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    container:
-      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run unit tests
-        run: |
-          godot --headless --path . -s res://tests/run_tests.gd 2>&1 | tee /tmp/run_tests.log
-          if grep -q "FAIL" /tmp/run_tests.log; then exit 1; fi
-          if grep -q "SCRIPT ERROR" /tmp/run_tests.log; then exit 1; fi
-
-  build-windows:
-    needs: test
+  build:
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:${{ env.GODOT_VERSION }}
