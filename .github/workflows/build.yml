@@ -1,0 +1,97 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: "4.7.2"
+  EXPORT_NAME: "BlockFallingBlast"
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run unit tests
+        run: |
+          mkdir -p build/test_logs
+          godot --headless --path . -s res://tests/run_tests.gd 2>&1 | tee build/test_logs/run_tests.log
+          if grep -q "FAIL" build/test_logs/run_tests.log; then
+            echo "::error::Unit tests failed"
+            exit 1
+          fi
+          if grep -q "SCRIPT ERROR" build/test_logs/run_tests.log; then
+            echo "::error::Script errors found"
+            exit 1
+          fi
+
+  build:
+    name: Build ${{ matrix.platform }}
+    needs: test
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            preset: "Windows Desktop"
+            output: "build/windows/BlockFallingBlast.exe"
+          - platform: android
+            preset: "Android"
+            output: "build/android/BlockFallingBlast.apk"
+          - platform: web
+            preset: "Web"
+            output: "build/web/index.html"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Import project
+        run: godot --headless --path . --import
+      - name: Export ${{ matrix.platform }}
+        run: |
+          mkdir -p "$(dirname "${{ matrix.output }}")"
+          godot --headless --path . --export-release "${{ matrix.preset }}" "${{ matrix.output }}"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXPORT_NAME }}-${{ matrix.platform }}
+          path: ${{ matrix.output }}
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Zip web build
+        run: |
+          if [ -d artifacts/BlockFallingBlast-web ]; then
+            cd artifacts/BlockFallingBlast-web && zip -r ../BlockFallingBlast-web.zip . && cd ../..
+          fi
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/BlockFallingBlast-windows/BlockFallingBlast.exe
+            artifacts/BlockFallingBlast-android/BlockFallingBlast.apk
+            artifacts/BlockFallingBlast-web.zip
+          generate_release_notes: true
