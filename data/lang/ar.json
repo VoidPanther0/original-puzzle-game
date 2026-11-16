@@ -1,0 +1,20 @@
+{
+  "Play": "العب", "Play Adventure": "العب المغامرة", "Play Classic": "العب الكلاسيكي",
+  "Continue": "متابعة", "Back": "رجوع", "Home": "الرئيسية", "Settings": "الإعدادات",
+  "Sound Settings": "إعدادات الصوت", "Quit": "خروج", "Cancel": "إلغاء", "Close": "إغلاق",
+  "Resume": "استئناف", "Restart": "إعادة البدء", "Paused": "متوقف مؤقتاً",
+  "Game Over": "انتهت اللعبة", "Play Again": "العب مرة أخرى", "Try Again": "حاول مرة أخرى",
+  "Level Failed": "فشل المستوى", "Next Level": "المستوى التالي", "Replay": "إعادة اللعب",
+  "Levels": "المستويات", "Chapters": "الفصول", "Daily Challenge": "التحدي اليومي", "Shop": "المتجر",
+  "Events": "الأحداث", "Season Pass": "تذكرة الموسم", "Leaderboard": "لوحة المتصدرين",
+  "Profile": "الملف الشخصي", "Inventory": "الحقيبة", "Achievements": "الإنجازات",
+  "Support and Feedback": "الدعم والملاحظات", "Language": "اللغة", "Music": "الموسيقى",
+  "Sound Effects": "المؤثرات الصوتية", "Vibration": "الاهتزاز",
+  "Privacy Policy": "سياسة الخصوصية", "Terms and Conditions": "الشروط والأحكام",
+  "Hammer": "المطرقة", "Refresh": "تحديث", "Shuffle": "خلط", "Locked": "مقفل",
+  "Claim": "استلام", "Not enough coins": "لا توجد عملات كافية", "Adventure": "المغامرة",
+  "Classic": "كلاسيكي", "Current Level": "المستوى الحالي", "How to complete": "كيف تكمل",
+  "Streak": "سلسلة الأيام", "Level Complete!": "اكتمل المستوى!", "More": "المزيد",
+  "Privacy": "الخصوصية", "Notifications": "الإشعارات", "Data": "البيانات", "Start": "ابدأ",
+  "Stay": "ابق", "No shots left": "لا توجد طلقات متبقية", "Good job!": "عمل رائع!"
+}

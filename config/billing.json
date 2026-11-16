@@ -1,0 +1,11 @@
+{
+  "test_mode": true,
+  "android": { "plugin_singleton": "GodotGooglePlayBilling" },
+  "products": {
+    "coins_500": "consumable",
+    "coins_3000": "consumable",
+    "gems_100": "consumable",
+    "booster_pack": "consumable",
+    "remove_ads": "non_consumable"
+  }
+}

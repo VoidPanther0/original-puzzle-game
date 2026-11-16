@@ -1,0 +1,20 @@
+{
+  "Play": "Oyna", "Play Adventure": "Macera Oyna", "Play Classic": "Klasik Oyna",
+  "Continue": "Devam", "Back": "Geri", "Home": "Ana Sayfa", "Settings": "Ayarlar",
+  "Sound Settings": "Ses Ayarları", "Quit": "Çıkış", "Cancel": "İptal", "Close": "Kapat",
+  "Resume": "Devam Et", "Restart": "Yeniden Başlat", "Paused": "Duraklatıldı",
+  "Game Over": "Oyun Bitti", "Play Again": "Tekrar Oyna", "Try Again": "Tekrar Dene",
+  "Level Failed": "Bölüm Başarısız", "Next Level": "Sonraki Bölüm", "Replay": "Tekrar Oyna",
+  "Levels": "Bölümler", "Chapters": "Fasıklar", "Daily Challenge": "Günlük Görev", "Shop": "Mağaza",
+  "Events": "Etkinlikler", "Season Pass": "Sezon Geçişi", "Leaderboard": "Sıralama",
+  "Profile": "Profil", "Inventory": "Envanter", "Achievements": "Başarımlar",
+  "Support and Feedback": "Destek ve Geri Bildirim", "Language": "Dil", "Music": "Müzik",
+  "Sound Effects": "Ses Efektleri", "Vibration": "Titreşim",
+  "Privacy Policy": "Gizlilik Politikası", "Terms and Conditions": "Koşullar ve Şartlar",
+  "Hammer": "Çekiç", "Refresh": "Yenile", "Shuffle": "Karıştır", "Locked": "Kilitli",
+  "Claim": "Al", "Not enough coins": "Yeterli coin yok", "Adventure": "Macera",
+  "Classic": "Klasik", "Current Level": "Mevcut Bölüm", "How to complete": "Nasıl tamamlanır",
+  "Streak": "Seri", "Level Complete!": "Bölüm tamamlandı!", "More": "Daha fazla",
+  "Privacy": "Gizlilik", "Notifications": "Bildirimler", "Data": "Veri", "Start": "Başla",
+  "Stay": "Kal", "No shots left": "Mermi kalmadı", "Good job!": "Harika iş!"
+}

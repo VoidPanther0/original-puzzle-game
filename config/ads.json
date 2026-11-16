@@ -1,0 +1,12 @@
+{
+  "test_mode": true,
+  "android": {
+    "plugin_singleton": "AdMob",
+    "app_id": "",
+    "banner_unit": "",
+    "interstitial_unit": "",
+    "rewarded_unit": ""
+  },
+  "interstitial_min_interval_sec": 180,
+  "interstitial_min_games_between": 3
+}

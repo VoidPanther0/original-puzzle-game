@@ -1,36 +1,26 @@
-extends Node
-## Dev helper: renders the menu and a mid-game board to PNG files.
-## Run (not headless): godot --path . res://tests/shot.tscn -- <output_dir>
+extends SceneTree
+## Dev tool: godot --path godot --resolution 450x800 -s res://tests/shot.gd
+func _initialize() -> void:
+	call_deferred("_run")
 
-func _ready() -> void:
-	get_tree().root.get_node("Settings").save_path = "user://shot_settings.cfg"
-	var out: String = OS.get_cmdline_user_args()[0] if OS.get_cmdline_user_args().size() > 0 else "user://"
-	await get_tree().process_frame
-	get_window().size = Vector2i(540, 960)
-	var main: Control = load("res://scenes/main.tscn").instantiate()
-	get_tree().root.add_child(main)
-	for _i in 8:
-		await get_tree().process_frame
-	await get_tree().create_timer(0.5).timeout
-	_save(out + "/menu.png")
-	main.get("_current").play_pressed.emit()
-	await get_tree().create_timer(0.6).timeout
-	var game: GameScreen = main.get("_current")
-	var rows := ["........", "........", "........", "..11....", "..1.55..", "3344.5..", "334466.7", "2.446677"]
-	for y in 8:
-		for x in 8:
-			game.state.board.cells[y * 8 + x] = 0 if rows[y][x] == "." else int(rows[y][x])
-	game.get("_board_view").display = game.state.board.cells.duplicate()
-	game.state.score = 245
-	game.call("_on_score_changed", 245)
-	game.call("_on_combo_changed", 3)
-	game.call("_refresh_tray")
-	await get_tree().create_timer(0.6).timeout
-	_save(out + "/game.png")
-	game.call("_open_pause")
-	await get_tree().create_timer(0.5).timeout
-	_save(out + "/pause.png")
-	get_tree().quit()
+func _wait(sec: float) -> void:
+	await create_timer(sec).timeout
 
-func _save(path: String) -> void:
-	get_viewport().get_texture().get_image().save_png(path)
+func _run() -> void:
+	var out := "C:/Users/This PC/AppData/Local/Temp/shots2"
+	DirAccess.make_dir_recursive_absolute(out)
+	var main: Node = load("res://ui/main.tscn").instantiate()
+	root.add_child(main)
+	root.get_node("SaveManager").set_setting("consent", "granted")
+	await _wait(1.2); await _snap(out, "1_logo")
+	await _wait(2.0); await _snap(out, "2_studio")
+	await _wait(1.6); await _snap(out, "3_loading")
+	await _wait(3.5); await _snap(out, "4_home")
+	main.current.list.get_parent().scroll_vertical = 600
+	await _wait(0.3); await _snap(out, "5_home_scrolled")
+	main.go("adventure", {}, false); await _wait(0.5); await _snap(out, "6_adventure")
+	quit()
+
+func _snap(out: String, name: String) -> void:
+	await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png("%s/%s.png" % [out, name])

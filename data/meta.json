@@ -1,0 +1,35 @@
+{
+  "_note": "Independent design values for this project (not recovered from the original game).",
+  "season": {
+    "id": 1, "name": "Season 1: Crystal Rush", "xp_per_tier": 400,
+    "tiers": [
+      {"coins": 100}, {"booster": "hammer", "n": 1}, {"coins": 150}, {"booster": "shuffle", "n": 2}, {"gems": 10},
+      {"coins": 200}, {"booster": "refresh", "n": 2}, {"coins": 250}, {"booster": "hammer", "n": 2}, {"gems": 30}
+    ]
+  },
+  "events": [
+    {"id": "evt_liner", "name": "Line Rush", "desc": "Clear 60 lines", "stat": "lines", "target": 60, "start": "2026-01-01", "end": "2099-12-31", "reward": {"gems": 25}},
+    {"id": "evt_builder", "name": "Block Builder", "desc": "Place 300 blocks", "stat": "blocks", "target": 300, "start": "2026-01-01", "end": "2099-12-31", "reward": {"coins": 500}},
+    {"id": "evt_wipe", "name": "Clean Sweep", "desc": "Clear the board 3 times", "stat": "boards_cleared", "target": 3, "start": "2026-01-01", "end": "2099-12-31", "reward": {"booster": "hammer", "n": 3}}
+  ],
+  "achievements": [
+    {"id": "a_first", "name": "First Steps", "desc": "Play 1 game", "stat": "games", "target": 1, "reward": {"coins": 50}},
+    {"id": "a_ten", "name": "Regular", "desc": "Play 10 games", "stat": "games", "target": 10, "reward": {"coins": 150}},
+    {"id": "a_lines", "name": "Liner", "desc": "Clear 100 lines", "stat": "lines", "target": 100, "reward": {"gems": 10}},
+    {"id": "a_combo", "name": "Combo Master", "desc": "Reach a x5 combo", "stat": "best_combo", "target": 5, "reward": {"gems": 15}},
+    {"id": "a_levels", "name": "Explorer", "desc": "Complete 10 levels", "stat": "levels_done", "target": 10, "reward": {"coins": 300}},
+    {"id": "a_wipe", "name": "Spotless", "desc": "Clear the whole board", "stat": "boards_cleared", "target": 1, "reward": {"gems": 10}}
+  ],
+  "shop": [
+    {"id": "coins_s", "name": "Coin Pouch", "kind": "iap", "give": {"coins": 500}, "product": "coins_500", "price_label": "$0.99"},
+    {"id": "coins_m", "name": "Coin Chest", "kind": "iap", "give": {"coins": 3000}, "product": "coins_3000", "price_label": "$4.99"},
+    {"id": "gems_s", "name": "Gem Handful", "kind": "iap", "give": {"gems": 100}, "product": "gems_100", "price_label": "$1.99"},
+    {"id": "boost_pack", "name": "Booster Pack", "kind": "iap", "give": {"hammer": 3, "refresh": 3, "shuffle": 3}, "product": "booster_pack", "price_label": "$2.99"},
+    {"id": "no_ads", "name": "Remove Ads", "kind": "iap", "give": {"ads_removed": true}, "product": "remove_ads", "price_label": "$3.99"},
+    {"id": "buy_hammer", "name": "Hammer x1", "kind": "coins", "cost": 150, "give": {"hammer": 1}},
+    {"id": "buy_refresh", "name": "Refresh x1", "kind": "coins", "cost": 100, "give": {"refresh": 1}},
+    {"id": "buy_shuffle", "name": "Shuffle x1", "kind": "coins", "cost": 80, "give": {"shuffle": 1}},
+    {"id": "gems_to_coins", "name": "500 Coins", "kind": "gems", "cost": 10, "give": {"coins": 500}}
+  ],
+  "daily": {"base_target": 600, "reward_coins": 120, "reward_gems": 5}
+}

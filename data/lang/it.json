@@ -1,0 +1,20 @@
+{
+  "Play": "Gioca", "Play Adventure": "Gioca Avventura", "Play Classic": "Gioca Classico",
+  "Continue": "Continua", "Back": "Indietro", "Home": "Home", "Settings": "Impostazioni",
+  "Sound Settings": "Impostazioni audio", "Quit": "Esci", "Cancel": "Annulla", "Close": "Chiudi",
+  "Resume": "Riprendi", "Restart": "Ricomincia", "Paused": "In pausa",
+  "Game Over": "Partita terminata", "Play Again": "Gioca ancora", "Try Again": "Riprova",
+  "Level Failed": "Livello fallito", "Next Level": "Prossimo livello", "Replay": "Rigioca",
+  "Levels": "Livelli", "Chapters": "Capitoli", "Daily Challenge": "Sfida giornaliera", "Shop": "Negozio",
+  "Events": "Eventi", "Season Pass": "Abbonamento stagione", "Leaderboard": "Classifica",
+  "Profile": "Profilo", "Inventory": "Inventario", "Achievements": "Obiettivi",
+  "Support and Feedback": "Assistenza e feedback", "Language": "Lingua", "Music": "Musica",
+  "Sound Effects": "Effetti sonori", "Vibration": "Vibrazione",
+  "Privacy Policy": "Informativa sulla privacy", "Terms and Conditions": "Termini e condizioni",
+  "Hammer": "Martello", "Refresh": "Rinomina", "Shuffle": "Mischia", "Locked": "Bloccato",
+  "Claim": "Riscatta", "Not enough coins": "Monete insufficienti", "Adventure": "Avventura",
+  "Classic": "Classico", "Current Level": "Livello attuale", "How to complete": "Come completarlo",
+  "Streak": "Serie", "Level Complete!": "Livello completato!", "More": "Altro",
+  "Privacy": "Privacy", "Notifications": "Notifiche", "Data": "Dati", "Start": "Inizia",
+  "Stay": "Resta", "No shots left": "Nessun colpo rimasto", "Good job!": "Bravi!"
+}

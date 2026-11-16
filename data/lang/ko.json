@@ -1,0 +1,20 @@
+{
+  "Play": "플레이", "Play Adventure": "모험 플레이", "Play Classic": "클래식 플레이",
+  "Continue": "계속", "Back": "뒤로", "Home": "홈", "Settings": "설정",
+  "Sound Settings": "사운드 설정", "Quit": "종료", "Cancel": "취소", "Close": "닫기",
+  "Resume": "계속하기", "Restart": "다시 시작", "Paused": "일시정지",
+  "Game Over": "게임 오버", "Play Again": "다시 플레이", "Try Again": "다시 시도",
+  "Level Failed": "레벨 실패", "Next Level": "다음 레벨", "Replay": "다시 플레이",
+  "Levels": "레벨", "Chapters": "챕터", "Daily Challenge": "일일 도전", "Shop": "상점",
+  "Events": "이벤트", "Season Pass": "시즌 패스", "Leaderboard": "랭킹",
+  "Profile": "프로필", "Inventory": "인벤토리", "Achievements": "업적",
+  "Support and Feedback": "고객 지원 및 피드백", "Language": "언어", "Music": "배경음악",
+  "Sound Effects": "효과음", "Vibration": "진동",
+  "Privacy Policy": "개인정보 처리방침", "Terms and Conditions": "이용약관",
+  "Hammer": "망치", "Refresh": "갱신", "Shuffle": "섞기", "Locked": "잠김",
+  "Claim": "받기", "Not enough coins": "코인이 부족합니다", "Adventure": "모험",
+  "Classic": "클래식", "Current Level": "현재 레벨", "How to complete": "완료 방법",
+  "Streak": "연속 플레이", "Level Complete!": "레벨 완료!", "More": "더보기",
+  "Privacy": "개인정보", "Notifications": "알림", "Data": "데이터", "Start": "시작",
+  "Stay": "머무르기", "No shots left": "탄창이 비었습니다", "Good job!": "잘했어요!"
+}
