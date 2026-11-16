@@ -7,7 +7,6 @@ on:
 
 env:
   GODOT_VERSION: "4.7.2"
-  EXPORT_NAME: "BlockFallingBlast"
 
 jobs:
   test:
@@ -22,34 +21,21 @@ jobs:
           if grep -q "FAIL" /tmp/run_tests.log; then exit 1; fi
           if grep -q "SCRIPT ERROR" /tmp/run_tests.log; then exit 1; fi
 
-  build:
+  build-windows:
     needs: test
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:${{ env.GODOT_VERSION }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: windows
-            preset: "Windows Desktop"
-            output: "build/windows/BlockFallingBlast.exe"
-          - platform: android
-            preset: "Android"
-            output: "build/android/BlockFallingBlast.apk"
-          - platform: web
-            preset: "Web"
-            output: "build/web/index.html"
     steps:
       - uses: actions/checkout@v4
       - name: Import project
         run: godot --headless --path . --import
-      - name: Export
+      - name: Export Windows
         run: |
-          mkdir -p "$(dirname "${{ matrix.output }}")"
-          godot --headless --path . --export-release "${{ matrix.preset }}" "${{ matrix.output }}"
+          mkdir -p build/windows
+          godot --headless --path . --export-release "Windows Desktop" "build/windows/BlockFallingBlast.exe"
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.EXPORT_NAME }}-${{ matrix.platform }}
-          path: ${{ matrix.output }}
+          name: BlockFallingBlast-windows
+          path: build/windows/BlockFallingBlast.exe
           if-no-files-found: error
