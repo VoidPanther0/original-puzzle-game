@@ -1,24 +1,5 @@
-# Godot 4+ specific ignores
 .godot/
-/android/
-
-# Generated builds
-/build/
-
-# Signing material and credentials. NEVER commit these.
+build/
 *.keystore
 *.jks
-export_credentials.cfg
 .env
-.env.*
-
-# OS / editor junk
-.DS_Store
-Thumbs.db
-*.tmp
-*.swp
-*~
-
-# Python caches (tooling)
-__pycache__/
-*.pyc
