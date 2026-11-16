@@ -35,7 +35,8 @@ Legend: ✅ implemented **and tested** · 🟡 implemented, only partly/indirect
   crawlers (18 screens, 1211 button presses, 0 script errors). Visual polish checked on
   screenshots, not on a real phone.
 - 🟡 Languages: 16 languages (`en`, `hi`, `ja`, `zh`, `es`, `fr`, `de`, `pt`, `ru`, `ko`, `ar`,
-  `it`, `tr`, `id`, `vi`, `pl`) with 57 keys each; English is the key and the fallback
+  `it`, `tr`, `id`, `vi`, `pl`) with a growing key set (57-91 keys depending on how far the
+  translation has progressed); English is the key and the fallback
 - 🟡 Gem/button/icon art from an original reference sheet (screenshot-checked at 450×800 dark theme
   only; light theme, desktop sizes and Android untested). Not used yet: background panel, board
   frame, medals, ribbons, shield/crown, sparkle FX

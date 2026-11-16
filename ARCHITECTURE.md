@@ -85,6 +85,7 @@ changes. The save also holds the auto-saved endless run (`run`) and the cloud re
 
 English text is the key; `data/lang/<code>.json` maps English → translation; add the code to
 `I18n.LANGUAGES`. Currently **16 languages** (`en`, `hi`, `ja`, `zh`, `es`, `fr`, `de`, `pt`, `ru`,
-`ko`, `ar`, `it`, `tr`, `id`, `vi`, `pl`) with 57 keys each — `en.json` is intentionally empty
+`ko`, `ar`, `it`, `tr`, `id`, `vi`, `pl`). The key set is growing (57-91 keys per language
+depending on how far each translation has progressed) - `en.json` is intentionally empty
 because English is the key. Missing keys fall back to English, so a partial translation never breaks
 a screen.

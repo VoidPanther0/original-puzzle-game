@@ -58,7 +58,7 @@ ui/             main.tscn + main.gd (screen manager)  screen.gd (base)  ui_kit.g
                 board_view.gd  logo.gd  currency_bar.gd  stars_display.gd  streak_chip.gd
                 shots_chip.gd  switch.gd  screens/*.gd (19)
 data/           chapters.json (10 chapters x 10 levels)  meta.json (season/events/achievements/shop/daily)
-                lang/<code>.json (16 languages, 57 keys each; English is the key)
+                lang/<code>.json (16 languages, 57-91 keys depending on translation progress; English is the key)
 config/         ads.json  app.json  backend.json  billing.json
 ```
 

@@ -33,8 +33,8 @@ Newest first. Version numbers follow `config/app.json` / `export_presets.cfg` (`
 
 **Localisation**
 - 16 languages (`en`, `hi`, `ja`, `zh`, `es`, `fr`, `de`, `pt`, `ru`, `ko`, `ar`, `it`, `tr`, `id`,
-  `vi`, `pl`), 57 keys each. English is the key, `en.json` is intentionally empty and every missing
-  key falls back to English.
+  `vi`, `pl`). The key set is growing (57-91 keys per language depending on translation progress).
+  English is the key, `en.json` is intentionally empty and every missing key falls back to English.
 
 **Art**
 - UI art from an original reference sheet: 9 gem blocks (incl. a stone block), purple/blue/gold pill
