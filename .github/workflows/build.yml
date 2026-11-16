@@ -3,39 +3,24 @@ name: Build
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
-
-env:
-  GODOT_VERSION: "4.7.2"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install export templates
-        run: |
-          TPL_DIR="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          mkdir -p "$TPL_DIR"
-          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz" -O /tmp/templates.tpz
-          unzip -q /tmp/templates.tpz -d "$TPL_DIR"
-          ls "$TPL_DIR" | head
-
-      - name: Import project
-        run: godot --headless --path . --import
-
-      - name: Export Windows
-        run: |
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.2
+          use-dotnet: false
+      - run: godot --version
+      - run: godot --headless --path . --import
+      - run: |
           mkdir -p build/windows
           godot --headless --path . --export-release "Windows Desktop" "build/windows/BlockFallingBlast.exe"
-
       - uses: actions/upload-artifact@v4
         with:
           name: BlockFallingBlast-windows
           path: build/windows/BlockFallingBlast.exe
-          if-no-files-found: error
