@@ -15,14 +15,11 @@ jobs:
       image: barichello/godot-ci:${{ env.GODOT_VERSION }}
     steps:
       - uses: actions/checkout@v4
-      - name: Import project
-        run: godot --headless --path . --import
-      - name: Export Windows
-        run: |
+      - run: godot --headless --path . --import
+      - run: |
           mkdir -p build/windows
           godot --headless --path . --export-release "Windows Desktop" "build/windows/BlockFallingBlast.exe"
       - uses: actions/upload-artifact@v4
         with:
           name: BlockFallingBlast-windows
           path: build/windows/BlockFallingBlast.exe
-          if-no-files-found: error
