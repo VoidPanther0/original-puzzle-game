@@ -12,5 +12,8 @@ jobs:
       image: barichello/godot-ci:4.7.2
     steps:
       - uses: actions/checkout@v4
-      - run: godot --version
       - run: godot --headless --path . --import
+      - run: |
+          mkdir -p build/windows
+          godot --headless --path . --export-release "Windows Desktop" "build/windows/BlockFallingBlast.exe"
+      - run: ls -la build/windows/
