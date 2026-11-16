@@ -5,16 +5,14 @@ on:
     branches: [main]
   workflow_dispatch:
 
-env:
-  GODOT_VERSION: "4.7.2"
-
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:${{ env.GODOT_VERSION }}
+      image: barichello/godot-ci:4.7.2
     steps:
       - uses: actions/checkout@v4
+      - run: godot --version
       - run: godot --headless --path . --import
       - run: |
           mkdir -p build/windows
