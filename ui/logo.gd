@@ -48,12 +48,8 @@ static func draw_mark(c: CanvasItem, ctr: Vector2, cs: float, k: float = 1.0) ->
 		var off := Vector2(i % 2, i / 2) * cs * 1.08 - Vector2(cs * 0.54, cs * 0.54)
 		var s := clampf(k * 1.5 - i * 0.18, 0.0, 1.0)
 		var r := Rect2(ctr + off + Vector2(cs, cs) * (1.0 - s) / 2.0, Vector2(cs, cs) * s)
-		var gem := UIKit.tex("gem_%d" % cols[i])
-		if gem != null:
-			c.draw_texture_rect(gem, r, false)
-			continue
-		c.draw_style_box(UIKit.style(UIKit.BLOCK_COLORS[cols[i]], int(cs * 0.22), UIKit.BLOCK_COLORS[cols[i]].darkened(0.25), 3), r)
-		c.draw_style_box(UIKit.style(Color(1, 1, 1, 0.3), int(cs * 0.12)), Rect2(r.position + r.size * Vector2(0.14, 0.1), r.size * Vector2(0.72, 0.3)))
+		var sb := UIKit.flat(UIKit.BLOCK_COLORS[cols[i]], int(cs * 0.16), maxi(2, int(cs * 0.07)))
+		c.draw_style_box(sb, r)
 
 func _draw() -> void:
 	var cs := block_size(size.x)
@@ -67,5 +63,4 @@ func _draw() -> void:
 		col.a = clampf((reveal - 0.4) / 0.6, 0.0, 1.0)
 		var w := font.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
 		var pos := Vector2((size.x - w) / 2.0, cs * 3.55)
-		draw_string_outline(font, pos, title, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, 8, Color(0, 0, 0, col.a * 0.45))
 		draw_string(font, pos, title, HORIZONTAL_ALIGNMENT_LEFT, -1, fs, col)

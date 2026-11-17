@@ -145,12 +145,9 @@ class Background extends Control:
 			_acc = 0.0
 			queue_redraw()
 	func _draw() -> void:
-		var top := UIKit.c("bg_top")
-		var bot := UIKit.c("bg_bottom")
-		draw_polygon(PackedVector2Array([Vector2.ZERO, Vector2(size.x, 0), size, Vector2(0, size.y)]),
-			PackedColorArray([top, top, bot, bot]))
-		var tint := Color(1, 1, 1, 0.05) if UIKit.is_dark() else Color(0.5, 0.4, 1, 0.07)
-		for i in 7:
-			var a := _t + i * 1.7
-			var p := Vector2(size.x * (0.5 + 0.45 * sin(a * 0.7 + i)), size.y * (0.5 + 0.48 * cos(a * 0.5 + i * 2.0)))
-			draw_circle(p, 60.0 + 40.0 * ((i * 37) % 5), tint)
+		draw_rect(Rect2(Vector2.ZERO, size), UIKit.c("bg_top"))
+		var dot := Color(1, 1, 1, 0.035) if UIKit.is_dark() else Color(0, 0, 0, 0.05)
+		var step := 48.0
+		for gx in int(size.x / step) + 1:
+			for gy in int(size.y / step) + 1:
+				draw_circle(Vector2(gx, gy) * step + Vector2(step, step) * 0.5, 2.0, dot)

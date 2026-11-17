@@ -114,9 +114,6 @@ func _open_more() -> void:
 		var b := UIKit.button(e[0], "secondary", Vector2(0, 74))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.add_theme_font_size_override("font_size", 21)
-		if str(e[2]) != "" and UIKit.tex(str(e[2])) != null:
-			b.icon = UIKit.tex(str(e[2]))
-			b.add_theme_constant_override("icon_max_width", 34)
 		b.pressed.connect(func():
 			ov.queue_free()
 			main.go(e[1]))

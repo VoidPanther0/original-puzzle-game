@@ -4,6 +4,11 @@ Newest first. Version numbers follow `config/app.json` / `export_presets.cfg` (`
 
 ## 0.1.0 — current working tree (rebrand + shooting)
 
+**UI restyle (no rule change)**
+- All image art removed (`assets/ui/` deleted). The UI is now flat and code-drawn: solid colours,
+  chunky buttons with a darker bottom lip, dot-grid background, flat rounded blocks, new geometric
+  app icon. Icons (back, pause, hammer, refresh, shuffle, lock, coin, gem) live in `ui/icons.gd`.
+
 **Repo layout**
 - The Godot project **is** the repository root: `core/`, `autoload/`, `ui/`, `data/`, `config/`,
   `assets/`, `tests/`, `export_presets.cfg`. The old `godot/` subfolder is gone.

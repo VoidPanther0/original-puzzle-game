@@ -73,7 +73,6 @@ func _toggle(label: String, key: String, extra: Callable = Callable()) -> void:
 	cb.add_theme_font_size_override("font_size", 28)
 	cb.add_theme_color_override("font_color", UIKit.c("text"))
 	cb.custom_minimum_size = Vector2(0, 64)
-	UIKit.skin_toggle(cb)
 	cb.toggled.connect(func(on):
 		SaveManager.set_setting(key, on)
 		if extra.is_valid(): extra.call(on))

@@ -26,9 +26,7 @@ func build() -> void:
 		b.disabled = not unlocked
 		if not unlocked:
 			b.text = ""
-			if UIKit.tex("lock") != null:
-				b.icon = UIKit.tex("lock")
-				b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			b.add_child(_lock_icon())
 		b.pressed.connect(func(): _start(chapter, i))
 		v.add_child(b)
 		var sd := StarsDisplay.new(stars, 22.0)
@@ -43,3 +41,8 @@ func _start(chapter: int, index: int) -> void:
 		["Start", func():
 			if GameState.start_level(chapter, index): main.go("game"), "primary"],
 		["Cancel", Callable(), "secondary"]], false)
+
+func _lock_icon() -> Control:
+	var ic := Icons.IconRect.new("lock", UIKit.c("text_dim"))
+	ic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 36)
+	return ic

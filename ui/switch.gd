@@ -20,8 +20,6 @@ func _gui_input(event: InputEvent) -> void:
 		accept_event()
 
 func _draw() -> void:
-	var art_on := UIKit.tex("toggle_on")
-	var art_off := UIKit.tex("toggle_off")
 	var aspect := 2.55
 	var w := size.x
 	var h := w / aspect
@@ -29,11 +27,8 @@ func _draw() -> void:
 		h = size.y
 		w = h * aspect
 	var r := Rect2(Vector2((size.x - w) * 0.5, (size.y - h) * 0.5), Vector2(w, h))
-	if art_on != null and art_off != null:
-		draw_texture_rect(art_on if on else art_off, r, false)
-		return
 	# fallback: plain rounded switch
-	var base := UIKit.c("accent") if on else Color(0, 0, 0, 0.4)
+	var base := UIKit.c("primary") if on else UIKit.c("secondary")
 	draw_style_box(UIKit.style(base, int(h * 0.5)), r)
 	var knob := Vector2(r.position.x + (h * 0.5 if not on else w - h * 0.5), r.position.y + h * 0.5)
 	draw_circle(knob, h * 0.36, Color.WHITE)

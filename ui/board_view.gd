@@ -275,24 +275,15 @@ func _process(delta: float) -> void:
 
 # ---------------------------------------------------------------- drawing
 func block(r: Rect2, color_idx: int, alpha: float = 1.0, lighten: float = 0.0) -> void:
-	var gem := UIKit.tex("gem_%d" % color_idx) if color_idx <= 9 else null
-	if gem != null:
-		var m := Color(1, 1, 1, alpha)
-		if lighten > 0.0: m = Color(1 + lighten, 1 + lighten, 1 + lighten, alpha)
-		draw_texture_rect(gem, r.grow(-r.size.x * 0.02), false, m)
-		return
-	var base: Color = UIKit.BLOCK_COLORS[clampi(color_idx, 1, 9)]
-	base = base.lightened(lighten)
+	var base: Color = UIKit.BLOCK_COLORS[clampi(color_idx, 1, 9)].lightened(lighten)
 	base.a = alpha
-	_sb.bg_color = base
-	var edge := base.darkened(0.25)
-	edge.a = alpha
-	_sb.border_color = edge
 	var rr := r.grow(-r.size.x * 0.04)
+	_sb.bg_color = base
+	_sb.set_corner_radius_all(int(rr.size.x * 0.2))
+	_sb.set_border_width_all(0)
+	_sb.border_width_bottom = maxi(2, int(rr.size.x * 0.08))
+	_sb.border_color = Color(base.r * 0.7, base.g * 0.7, base.b * 0.7, alpha)   # darker bottom lip, flat
 	draw_style_box(_sb, rr)
-	var g := Rect2(rr.position + Vector2(rr.size.x * 0.14, rr.size.y * 0.1), Vector2(rr.size.x * 0.72, rr.size.y * 0.3))
-	_gloss.bg_color = Color(1, 1, 1, 0.3 * alpha)
-	draw_style_box(_gloss, g)
 
 func _draw_piece(piece: Dictionary, top_left: Vector2, cs: float, alpha: float = 1.0) -> void:
 	for p in piece.cells:

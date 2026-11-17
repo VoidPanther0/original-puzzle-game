@@ -26,7 +26,7 @@ func build() -> void:
 	var hud := HBoxContainer.new()
 	hud.add_theme_constant_override("separation", 12)
 	column.add_child(hud)
-	var pause := UIKit.square_button("II")
+	var pause := UIKit.icon_button("pause", Vector2(72, 72))
 	pause.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	pause.pressed.connect(_pause)
 	hud.add_child(pause)
@@ -75,14 +75,15 @@ func build() -> void:
 	for n in ["hammer", "refresh", "shuffle"]:
 		var b := UIKit.button(n.capitalize(), "secondary", Vector2(0, 76))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var ic := UIKit.tex({"hammer": "hammer", "refresh": "recycle", "shuffle": "shuffle"}[n])
-		if ic != null:
-			b.icon = ic
-			b.expand_icon = false
-			b.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
-			b.add_theme_font_size_override("font_size", 22)
-			b.add_theme_constant_override("icon_max_width", 40)
-			b.add_theme_constant_override("h_separation", 4)
+		b.add_theme_font_size_override("font_size", 22)
+		var ic := Icons.IconRect.new({"hammer": "hammer", "refresh": "refresh", "shuffle": "shuffle"}[n], UIKit.c("text"))
+		ic.set_anchors_preset(Control.PRESET_CENTER_LEFT)
+		ic.offset_left = 12
+		ic.offset_right = 44
+		ic.offset_top = -19
+		ic.offset_bottom = 13
+		b.add_child(ic)
+		b.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		b.pressed.connect(_use_booster.bind(n))
 		bar.add_child(b)
 		_booster_btns[n] = b
